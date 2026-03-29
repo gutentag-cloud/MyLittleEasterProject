@@ -1,4 +1,6 @@
 import Foundation
+import CoreGraphics 
+import Combine
 
 /// Every wallpaper type the engine supports.
 enum WallpaperType: String, Codable, CaseIterable {
