@@ -48,11 +48,13 @@ final class HotkeyManager {
     }
     
     private func addGlobalHotkey(keyCode: Int, modifiers: NSEvent.ModifierFlags, handler: @escaping () -> Void) {
-        if let monitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { event in
+        let monitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown, handler: { event in
             if event.keyCode == keyCode && event.modifierFlags.intersection(.deviceIndependentFlagsMask) == modifiers {
                 handler()
             }
-        } {
+        })
+        
+        if let monitor = monitor {
             monitors.append(monitor)
         }
     }
