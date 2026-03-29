@@ -1,3 +1,4 @@
+
 // swift-tools-version: 5.9
 import PackageDescription
 
@@ -14,10 +15,7 @@ let package = Package(
         .executableTarget(
             name: "MacLiveEngine",
             dependencies: ["HotKey"],
-            path: "Sources/MacLiveEngine",
-            resources: [
-                .process("../../Resources")
-            ]
+            path: "Sources/MacLiveEngine"
         ),
         .testTarget(
             name: "MacLiveEngineTests",
