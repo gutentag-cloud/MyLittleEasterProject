@@ -19,3 +19,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+
+
+
+---
+
+## Summary of All Features
+
+| Category | Feature Count | Details |
+|---|---|---|
+| **Renderers** | 7 | Video, Web, Metal Shader, Particles, Slideshow, Quartz Composer, Generative Art |
+| **Display** | 4 | Multi-monitor, per-display control, span mode, auto-resize on display changes |
+| **Performance** | 8 | FPS control (5 presets), battery detection, fullscreen app pause, CPU/memory monitoring, sleep/wake handling, space change handling |
+| **Audio** | 5 | FFT analysis, bass/mid/treble split, 64-band spectrum, smoothing, forwarding to all renderers |
+| **Playlist** | 6 | Auto-advance, shuffle, configurable intervals, directory scanning, add/remove/clear, previous/next |
+| **Scheduling** | 3 | Day/night wallpapers, configurable sunrise/sunset hours |
+| **Transitions** | 6 | None, Crossfade, Dissolve, Slide L/R, Zoom In/Out |
+| **Weather** | 3 | Location-based weather fetch, condition mapping, preset suggestions |
+| **Plugins** | 4 | Runtime bundle loading, plugin protocol, host API, plugin directory management |
+| **Scripting** | 4 | JSON scripts, lifecycle hooks, property control, engine commands |
+| **Networking** | 2 | Wallpaper downloader with progress, weather API integration |
+| **Hotkeys** | 4 | Play/pause, next, previous, mute — all global |
+| **UI** | 3 | Full menu bar app, nested submenus, preferences window |
+| **Utilities** | 6 | Logger with rotation, file watcher, battery monitor, safe subscript, URL helpers, snapshot |
+| **Persistence** | 2 | JSON config with 40+ settings, auto-save |
+| **Particle Presets** | 5 | Starfield, Fireflies, Snow, Rain, Galaxy |
+| **Generative Presets** | 3 | Flow Field, Voronoi, Julia Fractal |
+| **Testing** | 8 | Config persistence, type detection, audio, playlist, display, URL extensions, math, scheduler |
+
+**Total: 80+ distinct features** across 28 source files.
