@@ -1,4 +1,4 @@
-cat > ~/MyLittleEasterProject/Sources/MacLiveEngine/Core/WallpaperWindow.swift << 'EOF'
+
 import AppKit
 
 /// A borderless, transparent window pinned to the desktop level (behind all other windows).
@@ -69,4 +69,3 @@ final class WallpaperView: NSView {
         super.updateLayer()
     }
 }
-EOF
