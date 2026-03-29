@@ -1,5 +1,8 @@
+
 import Foundation
 import Combine
+import CoreVideo
+import QuartzCore
 
 /// Tracks FPS, CPU, and memory usage.
 final class PerformanceMonitor: ObservableObject {
@@ -75,7 +78,9 @@ final class PerformanceMonitor: ObservableObject {
         guard result == KERN_SUCCESS, let threads = threadList else { return 0 }
         
         var totalCPU: Double = 0
-        let threadBasicInfoCount = mach_msg_type_number_t(MemoryLayout<thread_basic_info_data_t>.size / MemoryLayout<natural_t>.size)
+        let threadBasicInfoCount = mach_msg_type_number_t(
+            MemoryLayout<thread_basic_info_data_t>.size / MemoryLayout<natural_t>.size
+        )
         
         for i in 0..<Int(threadCount) {
             var info = thread_basic_info()
@@ -85,14 +90,17 @@ final class PerformanceMonitor: ObservableObject {
                     thread_info(threads[i], thread_flavor_t(THREAD_BASIC_INFO), intPtr, &count)
                 }
             }
-            if kr == KERN_SUCCESS && info.flags & TH_FLAGS_IDLE == 0 {
+            if kr == KERN_SUCCESS && (info.flags & TH_FLAGS_IDLE) == 0 {
                 totalCPU += Double(info.cpu_usage) / Double(TH_USAGE_SCALE) * 100
             }
         }
         
-        vm_deallocate(mach_task_self_, vm_address_t(bitPattern: threads), vm_size_t(threadCount) * vm_size_t(MemoryLayout<thread_t>.size))
+        let size = vm_size_t(threadCount) * vm_size_t(MemoryLayout<thread_t>.size)
+        vm_deallocate(mach_task_self_, vm_address_t(bitPattern: threads), size)
+        
         return totalCPU
     }
+    
     private func measureMemory() -> Double {
         var info = mach_task_basic_info()
         var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
