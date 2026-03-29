@@ -1,21 +1,31 @@
+cat > ~/MyLittleEasterProject/Sources/MacLiveEngine/Core/WallpaperWindow.swift << 'EOF'
 import AppKit
 
 /// A borderless, transparent window pinned to the desktop level (behind all other windows).
 final class WallpaperWindow: NSWindow {
     
-    let displayID: CGDirectDisplayID
+    var displayID: CGDirectDisplayID?
     
     init(screen: NSScreen, displayID: CGDirectDisplayID) {
         self.displayID = displayID
         
         super.init(
             contentRect: screen.frame,
-            styleMask: .borderless,
+            styleMask: [.borderless],
             backing: .buffered,
-            defer: false,
-            screen: screen
+            defer: false
         )
         
+        self.setupWindow(screen: screen)
+    }
+
+    // This override is required to prevent the "unimplemented initializer" crash
+    override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool) {
+        super.init(contentRect: contentRect, styleMask: style, backing: backingStoreType, defer: flag)
+        self.setupWindow(screen: NSScreen.main ?? screen!)
+    }
+    
+    private func setupWindow(screen: NSScreen) {
         self.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.desktopWindow)))
         self.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle, .canJoinAllApplications]
         self.isOpaque = true
@@ -27,6 +37,9 @@ final class WallpaperWindow: NSWindow {
         self.hidesOnDeactivate = false
         self.canHide = false
         self.animationBehavior = .none
+        
+        // Ensure it stays on the correct screen
+        self.setFrame(screen.frame, display: true)
         
         // Create a layer-backed content view for GPU rendering
         let view = WallpaperView(frame: screen.frame)
@@ -56,3 +69,4 @@ final class WallpaperView: NSView {
         super.updateLayer()
     }
 }
+EOF
