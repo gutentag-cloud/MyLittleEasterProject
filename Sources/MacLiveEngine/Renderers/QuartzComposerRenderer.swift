@@ -1,9 +1,7 @@
 import AppKit
 import Quartz
 
-/// Renders Quartz Composer (.qtz) compositions.
 final class QuartzComposerRenderer: WallpaperRenderer {
-    
     let targetView: NSView
     private let configuration: Configuration
     private var qcView: QCView?
@@ -15,51 +13,33 @@ final class QuartzComposerRenderer: WallpaperRenderer {
     
     func load(url: URL) {
         cleanup()
+        let view = QCView(frame: targetView.bounds)
+        view.autoresizingMask = [.width, .height]
         
-        let qcView = QCView(frame: targetView.bounds)
-        qcView.autoresizingMask = [.width, .height]
-        
+        // Correct Modern API calls
         if let composition = QCComposition(file: url.path) {
-            qcView.loadComposition(composition)
-        } else {
-            qcView.load(url.path)
+            view.load(composition)
         }
         
-        qcView.maxRenderingFrameRate = Float(configuration.targetFPS)
+        view.setMaxRenderingFrameRate(Float(configuration.targetFPS))
         
         targetView.subviews.forEach { $0.removeFromSuperview() }
-        targetView.addSubview(qcView)
-        self.qcView = qcView
-        
-        Logger.shared.info("Quartz Composer composition loaded")
+        targetView.addSubview(view)
+        self.qcView = view
     }
     
-    func start() {
-        qcView?.startRendering()
-    }
-    
-    func pause() {
-        qcView?.pauseRendering()
-    }
-    
-    func resume() {
-        qcView?.resumeRendering()
-    }
-    
-    func stop() {
-        cleanup()
-    }
+    func start() { qcView?.startRendering() }
+    func pause() { qcView?.pauseRendering() }
+    func resume() { qcView?.resumeRendering() }
+    func stop() { cleanup() }
     
     func setTargetFPS(_ fps: Int) {
-        qcView?.maxRenderingFrameRate = Float(fps)
+        qcView?.setMaxRenderingFrameRate(Float(fps))
     }
     
     func receiveAudioSpectrum(_ spectrum: AudioSpectrum) {
-        // Pass audio data as input to the composition
-        qcView?.setValue(NSNumber(value: spectrum.overallLevel), forInputKey: "audioLevel")
-        qcView?.setValue(NSNumber(value: spectrum.bass), forInputKey: "audioBass")
-        qcView?.setValue(NSNumber(value: spectrum.mid), forInputKey: "audioMid")
-        qcView?.setValue(NSNumber(value: spectrum.treble), forInputKey: "audioTreble")
+        qcView?.setValue(spectrum.overallLevel, forInputKey: "audioLevel")
+        qcView?.setValue(spectrum.bass, forInputKey: "audioBass")
     }
     
     private func cleanup() {
